@@ -26,7 +26,8 @@ SAMPLE INPUT:
 1 2
 SAMPLE OUTPUT:
 2
-Posts at (0,0), (1,0), and (1,2) form a triangle of area 1. Thus, the answer is 2⋅1=2. There is only one other triangle, with area 0.5.
+Posts at (0,0), (1,0), and (1,2) form a triangle of area 1. Thus, the answer is 2⋅1=2. There is only one other triangle, 
+with area 0.5.
 
 Problem credits: Travis Hance
 */
