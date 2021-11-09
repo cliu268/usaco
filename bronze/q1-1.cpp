@@ -41,3 +41,43 @@ If the pebble started under shell 3, then she doesn't make any correct guesses.
 
 Problem credits: Brian Dean
 */
+#include <iostream>
+#include <stdio.h>
+#include <vector>
+using namespace std;
+
+int main(void) {
+    freopen("shell.in", "r", stdin);
+    freopen("shell.out", "w", stdout);    
+
+    int n;
+    cin >> n;
+    vector<int[2]> swap(n);
+    vector<int> guess(n);
+    for (int i = 0; i < n; i++) {
+        cin >> swap[i][0] >> swap[i][1] >> guess[i];
+    }
+    vector<int> s(n+1);
+    int max=0;
+    // init stage 1
+    for (s[0] = 1; s[0] <= 3; s[0]++) {
+        int count=0;
+        for (int i = 0; i < n; i++) {
+            if (swap[i][0] == s[i]) {
+                s[i+1] = swap[i][1];
+            } else if (swap[i][1] == s[i]) {
+                s[i+1] = swap[i][0];
+            } else {
+                s[i+1] = s[i];
+            }
+            if (s[i+1] == guess[i]) {
+                count++;
+            }
+        }
+        if (count > max) {
+            max = count;
+        }
+    }
+    cout << max;
+    return 0;
+}

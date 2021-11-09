@@ -18,12 +18,33 @@ The values of a, b, c, and d all lie in the range 0…100, inclusive.
 
 OUTPUT FORMAT (file paint.out):
 Please output a single line containing the total length of the fence covered with paint.
+
 SAMPLE INPUT:
 7 10
 4 8
+
 SAMPLE OUTPUT:
 6
-Here, 6 total units of fence are covered with paint, from x=4 all the way through x=10.
 
+Here, 6 total units of fence are covered with paint, from x=4 all the way through x=10.
 Problem credits: Brian Dean
 */
+#include <iostream>
+#include <stdio.h>
+using namespace std;
+
+int main(void) {
+    freopen("paint.in", "r", stdin);
+    freopen("paint.out", "w", stdout);    
+
+    int a, b, c, d;
+    cin >> a >> b;
+    cin >> c >> d;
+
+    // if no intersect
+    if (b <= c || d <= a) {
+        cout << (b-a) + (d-c);
+    } else {
+        cout << max(b, d) - min(a, c);
+    }
+}

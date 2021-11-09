@@ -51,3 +51,81 @@ Test cases 5-12 satisfy no additional constraints.
 
 Problem credits: Benjamin Qi
 */
+#include <iostream>
+#include <vector>
+using namespace std;
+struct cow {
+    int x, y;
+    cow(int a, int b) : x(a), y(b) {}
+};
+struct cowpair {
+    cow x, y;
+    cowpair(cow a, cow b) : x(a), y(b) {} 
+};
+
+bool operator==(const cow &right, const cow &left) {
+    return (right.x == left.x && right.y == left.y);
+}
+
+bool operator==(const cowpair &right, const cowpair &left) {
+        return ((right.x == left.x && right.y == left.y) || (right.x == left.y && right.y == left.x));
+}
+
+bool operator!=(const cowpair &right, const cowpair &left) {
+        return !(right == left);
+}
+
+int main(void) {
+    int n, m;
+    cin >> n >> m;
+    vector<string> map;
+    for (int i = 0; i < n; i++) {
+        string row;
+        cin >> row;
+        map.push_back(row);
+    }
+    int answer = 0;
+    int dx[4] = {1, -1, 0, 0};
+    int dy[4] = {0, 0, -1, 1};
+    vector<cowpair> cp;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (map[i][j] == 'G') {
+                vector<cow> c;
+                for (int k = 0; k < 4; k++) {
+                    int x = i+dx[k], y = j+dy[k];
+                    if (x < 0 || y < 0 || x >= n || y >= m || map[x][y] != 'C') {
+                        continue;
+                    } else {
+                        c.push_back(cow(x, y));
+                    }
+                }
+                if (c.size() < 2) {
+                    continue;
+                } else if (c.size() == 2) {
+                    if (c[0].x != c[1].x && c[0].y != c[1].y) {
+                        cowpair temp = cowpair(c[0], c[1]);
+                        int i=0;
+                        for (; i < cp.size(); i++) {
+                            if (cp[i] == temp) {
+                                break;
+                            }
+                        }
+                        if (i < cp.size()) {
+                            continue;
+                        } else {
+                            cp.push_back(temp);
+                            answer++;
+                        }
+                    } else {
+                        answer++;
+                    }
+                } else { // at least 3 cows
+                    answer++;
+                }
+            }
+        }
+    }
+    cout << answer;
+    return 0;
+}

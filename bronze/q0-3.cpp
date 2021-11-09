@@ -31,3 +31,39 @@ with area 0.5.
 
 Problem credits: Travis Hance
 */
+#include <iostream>
+#include <stdio.h>
+#include <vector>
+using namespace std;
+
+int main(void) {
+    freopen("triangles.in", "r", stdin);
+    freopen("triangles.out", "w", stdout);    
+    int n;
+    cin >> n;
+    vector<int> x(n), y(n);
+    for (int i=0; i<n; i++) {
+        cin >> x[i] >> y[i];
+    }
+    int ans=0;
+    for (int i=0; i<n; i++) {
+        int maxx=0, maxy=0;
+        for (int j=0; j<n; j++) {
+            if (i == j) {
+                continue;
+            }
+            if (x[i] != x[j] && y[i] != y[j]) {
+                continue;
+            }
+            if (x[i] == x[j]) {
+                maxy = max(maxy, abs(y[i] - y[j]));
+            }
+            if (y[i] == y[j]) {
+                maxx = max(maxx, abs(x[i] - x[j]));
+            }
+        }
+        ans = max(ans, maxx * maxy);
+    }
+    cout << ans;
+    return 0;
+}

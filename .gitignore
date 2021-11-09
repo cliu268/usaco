@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# Test input/output
+*.in
+*.out

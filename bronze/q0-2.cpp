@@ -42,3 +42,72 @@ Initial State: 3  4  5
 (The last three states then repeat in a cycle ...)
 Problem credits: Brian Dean
 */
+#include <iostream>
+#include <stdio.h>
+using namespace std;
+
+int main(void) {
+    freopen("mixmilk.in", "r", stdin);
+    freopen("mixmilk.out", "w", stdout);    
+
+    int c1, c2, c3, m1, m2, m3;
+    cin >> c1 >> m1;
+    cin >> c2 >> m2;
+    cin >> c3 >> m3;
+
+    int s[3][101]; 
+    s[0][0] = m1;
+    s[1][0] = m2;
+    s[2][0] = m3;
+    for (int i = 1; i < 101; i++) {
+        switch (i%3) {
+            case 0: // 3->1
+                s[0][i] = ((c1 - s[0][i-1]) >= s[2][i-1]) ? s[0][i-1] + s[2][i-1] : c1;
+                s[1][i] = s[1][i-1];
+                s[2][i] = ((c1 - s[0][i-1]) >= s[2][i-1]) ? 0 : s[0][i-1] + s[2][i-1] - c1;
+                break;
+            case 1: // 1->2
+                s[0][i] = ((c2 - s[1][i-1]) >= s[0][i-1]) ? 0 : s[0][i-1] + s[1][i-1] - c2;
+                s[1][i] = ((c2 - s[1][i-1]) >= s[0][i-1]) ? s[0][i-1] + s[1][i-1] : c2;
+                s[2][i] = s[2][i-1];            
+                break;
+            case 2: // 2->3
+                s[0][i] = s[0][i-1];
+                s[1][i] = ((c3 - s[2][i-1]) >= s[1][i-1]) ? 0 : s[1][i-1] + s[2][i-1] - c3;
+                s[2][i] = ((c3 - s[2][i-1]) >= s[1][i-1]) ? s[1][i-1] + s[2][i-1] : c3;
+                break;
+        }
+    }
+
+    cout << s[0][100] << '\n' << s[1][100] << '\n' << s[2][100];
+}
+
+// the official solution is a way better answer :)
+/*
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+ 
+void pour(int& c1, int& m1, int& c2, int& m2) {
+  int amt = min(m1, c2 - m2);
+  m1 -= amt;
+  m2 += amt;
+}
+ 
+int main() {
+  int c1, c2, c3;
+  int m1, m2, m3;
+  scanf("%d %d", &c1, &m1);
+  scanf("%d %d", &c2, &m2);
+  scanf("%d %d", &c3, &m3);
+ 
+  for (int i = 0; i < 33; i++) {
+    pour(c1, m1, c2, m2);
+    pour(c2, m2, c3, m3);
+    pour(c3, m3, c1, m1);
+  }
+  pour(c1, m1, c2, m2);
+ 
+  printf("%d\n%d\n%d\n", m1, m2, m3);
+}
+*/
