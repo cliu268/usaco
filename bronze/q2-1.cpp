@@ -51,29 +51,14 @@ Test cases 5-12 satisfy no additional constraints.
 
 Problem credits: Benjamin Qi
 */
+// The logic is to check every 'G' cells, ignore those that have less than 2 cows
+// Add one to the answer for those with more than 2 cows (always chose cows from opposite directions that will be unique)
+// For those 'G' cells with exactly two cows, add them to a set after sorting (either direction works)
+// Final answer is answer + size of the set
 #include <iostream>
 #include <vector>
+#include <set>
 using namespace std;
-struct cow {
-    int x, y;
-    cow(int a, int b) : x(a), y(b) {}
-};
-struct cowpair {
-    cow x, y;
-    cowpair(cow a, cow b) : x(a), y(b) {} 
-};
-
-bool operator==(const cow &right, const cow &left) {
-    return (right.x == left.x && right.y == left.y);
-}
-
-bool operator==(const cowpair &right, const cowpair &left) {
-        return ((right.x == left.x && right.y == left.y) || (right.x == left.y && right.y == left.x));
-}
-
-bool operator!=(const cowpair &right, const cowpair &left) {
-        return !(right == left);
-}
 
 int main(void) {
     int n, m;
@@ -87,45 +72,34 @@ int main(void) {
     int answer = 0;
     int dx[4] = {1, -1, 0, 0};
     int dy[4] = {0, 0, -1, 1};
-    vector<cowpair> cp;
+    set<vector<pair<int, int>>> cp;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
             if (map[i][j] == 'G') {
-                vector<cow> c;
+                vector<pair<int, int>> c;
                 for (int k = 0; k < 4; k++) {
                     int x = i+dx[k], y = j+dy[k];
                     if (x < 0 || y < 0 || x >= n || y >= m || map[x][y] != 'C') {
                         continue;
                     } else {
-                        c.push_back(cow(x, y));
+                        c.push_back(pair(x, y));
                     }
                 }
                 if (c.size() < 2) {
                     continue;
                 } else if (c.size() == 2) {
-                    if (c[0].x != c[1].x && c[0].y != c[1].y) {
-                        cowpair temp = cowpair(c[0], c[1]);
-                        int i=0;
-                        for (; i < cp.size(); i++) {
-                            if (cp[i] == temp) {
-                                break;
-                            }
-                        }
-                        if (i < cp.size()) {
-                            continue;
-                        } else {
-                            cp.push_back(temp);
-                            answer++;
-                        }
-                    } else {
-                        answer++;
+                    if (c[0] > c[1]) {
+                        pair<int, int> temp = c[0];
+                        c.erase(c.begin());
+                        c.push_back(temp);
                     }
+                    cp.insert(c);
                 } else { // at least 3 cows
                     answer++;
                 }
             }
         }
     }
-    cout << answer;
+    cout << answer + cp.size();
     return 0;
 }
