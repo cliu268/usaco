@@ -49,3 +49,55 @@ Test cases 5-12 satisfy no additional constraints.
 
 Problem credits: Benjamin Qi
 */
+// for the ith cow added, check all its 4 neighbors, if there are exactly 3, answer + 1
+// check each of ith's neighboring cows, for each that now have 4 neighbors, answer - 1, for each that now have 3
+// neighbors, answer + 1
+#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<vector<int>> map(1001, vector<int>(1001, 0));
+int dx[4] = {1, 0, -1, 0};
+int dy[4] = {0, 1, 0, -1};
+
+int neighbor(int xx, int yy) {
+    int c = 0;
+    for (int i = 0; i < 4; i++) {
+        int x = xx + dx[i], y = yy + dy[i];
+        if (x < 0 || y < 0 || x >= 1001 || y >= 1001 || map[x][y] == 0) {
+            continue;
+        }
+        c++;
+    }
+    return c;    
+}
+
+int main(void) {
+    int n;
+    cin >> n;
+    vector<pair<int, int>> cow(n);
+    for (int i = 0; i < n; i++) {
+        cin >> cow[i].first >> cow[i].second;
+    }
+    int answer = 0;
+    for (int i = 0; i < n; i++) {
+        map[cow[i].first][cow[i].second] = 1;
+        if (neighbor(cow[i].first, cow[i].second) == 3) {
+            answer++;
+        }
+        for (int j = 0; j < 4; j++) {
+            int x = cow[i].first + dx[j], y = cow[i].second + dy[j];
+            if (x < 0 || y < 0 || x >= 1001 || y >= 1001 || map[x][y] == 0) {
+                continue;
+            }
+            int nc = neighbor(x, y);
+            if ( nc == 3) {
+                answer++;
+            } else if (nc == 4) {
+                answer--;
+            }
+        }
+        cout << answer << '\n';
+    }
+    return 0;
+}

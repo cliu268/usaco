@@ -22,7 +22,7 @@ SAMPLE INPUT:
 SAMPLE OUTPUT:
 8
 
-In this example, we cannot place the third cow into the first stall since 3=a3>b1=2. Similarly, we cannot place the 
+In this example, we cannot place the third cow into the first stall since 3 = a3 > b1 = 2. Similarly, we cannot place the 
 fourth cow into the first or third stalls. One way to satisfy the height limits is to assign cow 1 to stall 1, cow 2 
 to stall 2, cow 3 to stall 3, and cow 4 to stall 4.
 
@@ -31,3 +31,35 @@ Test cases 1-5 satisfy N≤8.
 Test cases 6-12 satisfy no additional constraints.
 Problem credits: Shreyas Thumathy
 */
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main(void) {
+    int n;
+    cin >> n;
+    vector<long long> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    sort(a.begin(), a.end(), greater<long long>());
+    vector<long long> b(n);
+    for (int i = 0; i < n; i++) {
+        cin >> b[i];
+    }    
+    sort(b.begin(), b.end(), greater<long long>());
+    long long answer=1;
+    for (int i = 0; i < n; i++) {
+        int m = n;
+        for (int j = 0; j < n; j++) {
+            if (a[i] > b[j]) {
+                m = j;
+                break;
+            }
+        }
+        answer *= (m-i);
+    }
+    cout << answer;
+    return 0;
+}
