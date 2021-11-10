@@ -31,6 +31,8 @@ Test cases 1-5 satisfy N≤8.
 Test cases 6-12 satisfy no additional constraints.
 Problem credits: Shreyas Thumathy
 */
+// sort both A and B first
+// its a simple n! question with the limitation of positions you can match
 #include <iostream>
 #include <vector>
 #include <algorithm>
