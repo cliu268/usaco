@@ -51,69 +51,72 @@ Problem credits: Brian Dean
 */
 #include <iostream>
 #include <stdio.h>
-#include <set>
+#include <vector>
 #include <algorithm>
 using namespace std;
 
 int main(void) {
     int n;
     cin >> n;
-    while (n > 0) {
-        set<int> A, B;
+    vector<string> ans(n);
+    for (int x = 0; x < n; x++) {
+        vector<int> A(4), B(4);
         for (int i = 0; i < 4; i++) {
-            int temp;
-            cin >> temp;
-            A.insert(temp);
+            cin >> A[i];
         }
         for (int i = 0; i < 4; i++) {
-            int temp;
-            cin >> temp;
-            B.insert(temp);
+            cin >> B[i];
         }
-        auto ab = A.begin(), aend = A.end(), bb = B.begin(), bend = B.end();
-        aend--;
-        bend--;
-        if (*ab == 10 || *bb == 10 || *aend == 1 || *bend == 1) {
-            cout << "no" << '\n';
+        int awin = 0, bwin = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (A[i] > B[j]) awin++;
+                if (B[i] > A[j]) bwin++;
+            }
+        }
+        if (awin == bwin) {
+            ans[x] = "no";
         } else {
-            bool w = false, l = false;
-            for (auto i = A.begin(); i != A.end(); i++) {
-                for (auto j = B.begin(); j != B.end(); j++) {
-                    if (*i > *j) {
-                        w = true;
-                    } else if (*i < *j) {
-                        l = true;
+            // brute force all c combos
+            for (int c1 = 1; c1 <= 10 && ans[x] != "yes"; c1++) {
+                for (int c2 = 1; c2 <= 10 && ans[x] != "yes"; c2++) {
+                    for (int c3 = 1; c3 <= 10 && ans[x] != "yes"; c3++) {
+                        for (int c4 = 1; c4 <= 10 && ans[x] != "yes"; c4++) {
+                            int cawin = 0, cbwin = 0;
+                            vector<int> C(4);
+                            C = {c1, c2, c3, c4};
+                            for (int i = 0; i < 4; i++) {
+                                for (int j = 0; j < 4; j++) {
+                                    if (A[i] > C[j]) cawin--;
+                                    if (C[i] > A[j]) cawin++;
+                                    if (B[i] > C[j]) cbwin--;
+                                    if (C[i] > B[j]) cbwin++;
+                                }
+                            }                           
+                            if (awin < bwin) {
+                                // cwin > bwin and cwin < awin
+                                if (cbwin > 0 && cawin < 0) {
+                                    ans[x] = "yes";
+                                    break;
+                                }
+                            } else { // awin > bwin
+                                // cwin > awin and cwin < bwin
+                                if (cawin > 0 && cbwin < 0) {
+                                    ans[x] = "yes";
+                                    break;
+                                }
+                            }
+                        }
                     }
-                    if (w && l) break;
                 }
-                if (w && l) break;
             }
-            if (w && l) {
-                cout << "yes" << '\n';
-            } else if (w) {
-                // A must lose
-                if (*ab < 10) {
-                    cout << "yes" << '\n';
-                } else {
-                    cout << "no" << '\n';
-                }
-            } else if (l) {
-                // A must win
-                if (*aend > 1) {
-                    cout << "yes" << '\n';
-                } else {
-                    cout << "no" << '\n';
-                }
-            } else {
-                cout << "no" << '\n';
+            if (ans[x] != "yes") {
+                ans[x] = "no";
             }
         }
-        // } else if (A == B || *ab > *bend || *bb > *aend) {
-        //     cout << "no" << '\n';
-        // } else {
-        //     cout << "yes" << '\n';
-        // }
-        n--;    
+    }
+    for (int x = 0; x < n; x++) {
+        cout << ans[x] << '\n';
     }
     return 0;
 }
