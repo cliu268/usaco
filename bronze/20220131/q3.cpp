@@ -70,6 +70,7 @@ int main(void) {
     int T;
     cin >> T;
     vector<long long> ans(T, 0);
+/*    
     for(int x = 0; x < T; x++) {
         int n, maxi=0, mini=0;
         set<pair<int, int>> cows;
@@ -113,6 +114,60 @@ int main(void) {
                 ans[x] += 2*diff;            
             }
             if (stop) break;
+        }
+    }
+*/    
+    for(int x = 0; x < T; x++) {
+        int n;
+        cin >> n;
+        vector<int> cow(n);
+        for (int i = 0; i < n; i++) {
+            cin >> cow[i];
+        }
+        if (n == 1) {
+            continue;
+        }
+        for (int i = 1; i < n; i++) {
+            if (cow[i] == cow[i-1]) {
+                continue;
+            }
+            if (cow[i] < cow[i-1]) {
+                // walk backwards
+                int diff = cow[i-1] - cow[i];
+                if (i-2 < 0) {
+                    ans[x] = -1;
+                    break;
+                } else {
+                    cow[i-2] -= diff;
+                    cow[i-1] -= diff;
+                    if (cow[i-2] < 0) {
+                        ans[x] = -1;
+                        break;
+                    } else {
+                        ans[x] += 2*diff;
+                        i = 1;
+                        continue;
+                    }
+                }
+            } else if (cow[i] > cow[i-1]) {
+                // walk fwd
+                int diff = cow[i] - cow[i-1];
+                if (i+1 == n) {
+                    ans[x] = -1;
+                    break;
+                } else {
+                    cow[i+1] -= diff;
+                    cow[i] -= diff;
+                    if (cow[i+1] < 0) {
+                        ans[x] = -1;
+                        break;
+                    } else {
+                        ans[x] += 2*diff;
+                        i = 1;
+                        continue;
+                    }
+                }                
+            }
         }
     }
     for(int x = 0; x < T; x++) {
