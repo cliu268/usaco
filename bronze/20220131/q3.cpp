@@ -70,53 +70,6 @@ int main(void) {
     int T;
     cin >> T;
     vector<long long> ans(T, 0);
-/*    
-    for(int x = 0; x < T; x++) {
-        int n, maxi=0, mini=0;
-        set<pair<int, int>> cows;
-        cin >> n;
-        vector<int> cow(n);
-        for (int i = 0; i < n; i++) {
-            cin >> cow[i];
-            cows.insert({cow[i], i});
-        }
-        auto ma = cows.end(), mi = cows.begin();
-        ma--;
-        maxi = ma->first, mini = mi->first;
-        while (maxi != mini) {
-            int diff = maxi-mini, oldmax = maxi;
-            bool stop = false;
-            while (oldmax == maxi) {
-                int index = ma->second;
-//        cout << "max is " << ma->first << " at index " << ma->second << " and min is " << mi->first << " at " << mi->second << " and current diff: " << diff << '\n';            
-                cows.erase({cow[index], index});
-                cow[index] -= diff;
-                cows.insert({cow[index], index});
-                if (index == 0 || cow[index+1] >= cow[index-1]) {
-                    // target cow[index + 1]
-                    cows.erase({cow[index+1], index+1});
-                    cow[index+1] -= diff;
-                    cows.insert({cow[index+1], index+1});               
-                } else if (index == n-1 || cow[index-1] >= cow[index+1]) {
-                    // target cow[index - 1]
-                    cows.erase({cow[index-1], index-1});
-                    cow[index-1] -= diff;
-                    cows.insert({cow[index-1], index-1});                
-                }
-                ma = cows.end(), mi = cows.begin();
-                ma--;
-                maxi = ma->first, mini = mi->first;
-                if (mini < 0) {
-                    ans[x] = -1;
-                    stop = true;
-                    break;
-                }
-                ans[x] += 2*diff;            
-            }
-            if (stop) break;
-        }
-    }
-*/    
     for(int x = 0; x < T; x++) {
         int n;
         cin >> n;
