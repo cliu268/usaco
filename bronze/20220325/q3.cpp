@@ -82,18 +82,31 @@ using namespace std;
 
 vector<int> a;
 map<int, vector<int>> recipe; // recipe[x] indicates what metals are needed to make x
-map<int, vector<int>> ingredient; // ingredient[x] indicates what metals can x make
 
-int solve(int n) {
-    for (int i = 1; i < n; i++) {
-        int minqty = 2147483647;
-        if (!recipe.count(i+1)) continue;
-        for (auto it = recipe[i+1].begin(); it != recipe[i+1].end(); it++) {
-            minqty = min(minqty, a[*it-1]);
-        }
-        a[i] += minqty;        
+// int solve(int n) {
+//     for (int i = 1; i < n; i++) {
+//         int minqty = 2147483647;
+//         if (!recipe.count(i+1)) continue;
+//         for (auto it = recipe[i+1].begin(); it != recipe[i+1].end(); it++) {
+//             minqty = min(minqty, a[*it-1]);
+//         }
+//         a[i] += minqty;        
+//     }
+//     return a[n-1];
+// }
+
+bool create_metal(int n) {
+    if (a[n-1] > 0) {
+        a[n-1]--;
+        return true;
     }
-    return a[n-1];
+    if (!recipe.count(n)) {
+        return false;
+    }
+    for (auto it = recipe[n].begin(); it != recipe[n].end(); it++) {
+        if (!create_metal(*it)) return false;
+    }
+    return true;
 }
 
 int main(void) {
@@ -112,13 +125,16 @@ int main(void) {
         vector<int> content(m);
         for (int x = 0; x < m; x++) {
             cin >> content[x];
-            ingredient[content[x]].push_back(l);
         }
-        sort(content.begin(), content.end());
         recipe[l] = content;
     }
-    cout << solve(n) << endl;
-        
+    //cout << solve(n) << endl;
+    int ans = a[n-1];
+    a[n-1] = 0;
+    while (create_metal(n)) {
+        ans++;
+    }
+    cout << ans << endl;
     // for (auto it = recipe[n].begin(); it != recipe[n].end(); it++) {
     //     cout << *it << endl;
     // }
